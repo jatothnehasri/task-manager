@@ -1,79 +1,60 @@
-body {
-  font-family: "Segoe UI", sans-serif;
-  background-color: #fff;
-  color: #000;
-  transition: 0.3s;
-  padding: 30px;
-}
+const taskInput = document.getElementById("taskInput");
+const taskList = document.getElementById("taskList");
+const themeToggle = document.getElementById("themeToggle");
 
-.dark {
-  background-color: #121212;
-  color: #fff;
-}
-
-input[type="text"] {
-  padding: 10px;
-  width: 220px;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-}
-
-button {
-  padding: 8px 12px;
-  margin-left: 6px;
-  border: none;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f4f4f4;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  animation: slideIn 0.3s ease-in-out;
-}
-
-li span {
-  flex: 1;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-li span.completed {
-  text-decoration: line-through;
-  color: gray;
-}
-
-li button {
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.dark li {
-  background: #333;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
+function addTask() {
+  const taskText = taskInput.value.trim();
+  if (!taskText) {
+    alert("⚠️ Please enter a task.");
+    return;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+
+  const li = document.createElement("li");
+
+  // 📝 Task Text
+  const span = document.createElement("span");
+  span.textContent = taskText;
+  span.onclick = () => {
+    span.classList.toggle("completed");
+    if (span.classList.contains("completed")) {
+      alert("✅ Marked as completed!");
+    } else {
+      alert("🔄 Marked as not completed!");
+    }
+  };
+
+  // ✏️ Edit button
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "✏️";
+  editBtn.title = "Edit Task";
+  editBtn.onclick = () => {
+    const newText = prompt("Edit task:", span.textContent);
+    if (newText !== null && newText.trim() !== "") {
+      span.textContent = newText.trim();
+      alert("📝 Task updated!");
+    }
+  };
+
+  // ❌ Delete button
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "🗑️";
+  deleteBtn.title = "Delete Task";
+  deleteBtn.onclick = () => {
+    if (confirm("Are you sure you want to delete this task? 🗑️")) {
+      li.remove();
+      alert("Task deleted!");
+    }
+  };
+
+  li.appendChild(span);
+  li.appendChild(editBtn);
+  li.appendChild(deleteBtn);
+  taskList.appendChild(li);
+
+  taskInput.value = "";
 }
+
+// 🌙 Theme toggle
+themeToggle.onclick = () => {
+  document.body.classList.toggle("dark");
+};
